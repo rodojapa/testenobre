@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Peças</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cadastro de Peças</h1>
+    <input type="text" id="nome" placeholder="Nome da Peça" required>
+    <input type="text" id="inicio" placeholder="Início da Peça" required>
+    <input type="text" id="fim" placeholder="Fim da Peça" required>
+    <input type="color" id="cor" required>
+    <input type="date" id="data" required>
+    <button onclick="adicionarPeca()">Adicionar Peça</button>
+    <button onclick="exportarExcel()">Exportar para Excel</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <th>Cor</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody id="listaPecas"></tbody>
+    </table>
+
+    <script>
+        function adicionarPeca() {
+            const nome = document.getElementById('nome').value;
+            const inicio = document.getElementById('inicio').value;
+            const fim = document.getElementById('fim').value;
+            const cor = document.getElementById('cor').value;
+            const data = document.getElementById('data').value;
+
+            const lista = document.getElementById('listaPecas');
+            const row = lista.insertRow();
+            row.innerHTML = `<td>${nome}</td><td>${inicio}</td><td>${fim}</td><td style="background-color:${cor};"></td><td>${data}</td>`;
+
+            // Limpa os campos após adicionar
+            document.getElementById('nome').value = '';
+            document.getElementById('inicio').value = '';
+            document.getElementById('fim').value = '';
+            document.getElementById('cor').value = '#000000';
+            document.getElementById('data').value = '';
+        }
+
+        function exportarExcel() {
+            let tabela = document.querySelector('table');
+            let data = new Blob([tabela.outerHTML], { type: 'application/vnd.ms-excel' });
+            let url = URL.createObjectURL(data);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'pecas.xls';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
